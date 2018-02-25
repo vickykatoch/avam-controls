@@ -32,30 +32,24 @@
   <div class="form-group row">
     <label for="dept" class="col-2 col-form-label">Dept</label>
     <div class="col-10">
-      <avam-drop-down 
-      [dropDirection] = "'TOP'"
-      [isSearchable]="false"
-      [showDropDown]="true"
-      [listItems]="depts"
-      [selectedValue] = "selectedDept"
-      formControlName="dept" 
-      [displayField]="'name'" ></avam-drop-down>
+      <avam-drop-down [dropDirection]="'BOTTOM'" [isSearchable]="false" [showDropDownButton]="true" [listItems]="depts"
+        [visibleItemsCount]="4" [selectedValue]="selectedDept" formControlName="dept" [displayField]="'name'"></avam-drop-down>
     </div>
   </div>
 
   <div class="form-group row">
-      <label for="dept" class="col-2 col-form-label">Dept</label>
-      <div class="col-10">
-        <select class="form-control">
-          <!-- <option value="default">One</option> -->
-          <option value="1">One</option>
-          <option value="2">One</option>
-          <option value="3">One</option>
-          <option value="4">One</option>
-        </select>
-      
-      </div>
+    <label for="dept" class="col-2 col-form-label">Dept</label>
+    <div class="col-10">
+      <select class="form-control">
+        <!-- <option value="default">One</option> -->
+        <option value="1">One</option>
+        <option value="2">One</option>
+        <option value="3">One</option>
+        <option value="4">One</option>
+      </select>
+
     </div>
+  </div>
 
   <div class="row">
     <div class="colg">

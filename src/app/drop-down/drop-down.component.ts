@@ -1,116 +1,199 @@
-import { Component, forwardRef, Input, Output, HostBinding, Renderer2, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { merge } from 'rxjs/observable/merge';
-import { Subscription } from 'rxjs/Subscription';
+import {
+  Component,
+  forwardRef,
+  Input,
+  Output,
+  HostBinding,
+  Renderer2,
+  ViewChild,
+  ElementRef,
+  EventEmitter,
+  HostListener
+} from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { fromEvent } from "rxjs/observable/fromEvent";
+import { merge } from "rxjs/observable/merge";
+import { Subscription } from "rxjs/Subscription";
+
+const DROPDOWN_DIRECTION_TOP = "TOP";
+const DROPDOWN_DIRECTION_BOTTOM = "BOTOM";
 
 @Component({
-  selector: 'avam-drop-down',
-  templateUrl: './drop-down.component.html',
-  styleUrls: ['./drop-down.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => DropDownComponent),
-    multi: true
-  }]
+  selector: "avam-drop-down",
+  templateUrl: "./drop-down.component.html",
+  styleUrls: ["./drop-down.component.scss"],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DropDownComponent),
+      multi: true
+    }
+  ]
 })
 export class DropDownComponent implements ControlValueAccessor {
+  //#region External Input/Output
   @Input() selectedValue: any;
   @Input() displayField: string;
   @Input() listItems: any[];
-  @ViewChild('input') input: ElementRef;
-  @ViewChild('btn') btn: ElementRef;
+  @ViewChild("input") input: ElementRef;
+  @ViewChild("btn") btn: ElementRef;
+  @ViewChild("dummyNode") dummyNode: ElementRef;
+  @Input() visibleItemsCount = 8;
+  @Input() dropDirection: string = DROPDOWN_DIRECTION_BOTTOM;
+  @Output() selectionChanged = new EventEmitter<any>();
+  @Input()
+  set disabled(value: boolean) {
+    this.setDisabledState(value);
+  }
+  @Input()
+  set isSearchable(value: boolean) {
+    if (value) {
+      this.renderer.setAttribute(this.input.nativeElement, "readonly", "");
+    } else {
+      this.renderer.removeAttribute(this.input.nativeElement, "readonly");
+    }
+  }
+  @Input()
+  set showDropDownButton(value: boolean) {
+    this.renderer.setStyle(
+      this.btn.nativeElement,
+      "display",
+      value ? "" : "none"
+    );
+  }
+  //#endregion
 
-  @Input() dropDirection: string = 'BOTTOM';
+  //#region Internal State
   private ddMenu: HTMLUListElement;
   private _isSearchable = false;
-  private isDisable = false;
+  private ddContainerHeight = 0;
+  private itemHeight = 0;
   isDropListVisible = false;
   hasFocus = false;
-  // @Input() visibleItemsCount : number;
+  private isDisabled = false;
   private subscriptions: Subscription[] = [];
+  onChange = (rating: number) => {};
+  onTouched = () => {};
+  //#endregion
 
-  onChange = (rating: number) => { };
-  onTouched = () => { };
+  //#region ctor
+  constructor(private renderer: Renderer2, private elRef: ElementRef) {}
+  //#endregion
 
-
-  constructor(private renderer: Renderer2, private elRef: ElementRef) { }
-
+  //#region NG Lifecycle Hooks
   ngOnInit() {
-    !this._isSearchable && this.renderer.setAttribute(this.input.nativeElement, 'readonly', '');
-    this.subscriptions.push(merge(
-      fromEvent(this.input.nativeElement, 'focus'),
-      fromEvent(this.btn.nativeElement, 'focus'),
-      // fromEvent(this.ddMenu.nativeElement, 'focus')
-    ).subscribe(this.onFocus.bind(this)));
-    this.subscriptions.push(merge(
-      fromEvent(this.input.nativeElement, 'blur'),
-      fromEvent(this.btn.nativeElement, 'blur'),
-      // fromEvent(this.ddMenu.nativeElement, 'blur')
-    ).subscribe(this.onBlur.bind(this)));
-    this.subscriptions.push(fromEvent(this.input.nativeElement, 'click')
-      .subscribe(this.onInputClick.bind(this)));
-
+    !this._isSearchable &&
+      this.renderer.setAttribute(this.input.nativeElement, "readonly", "");
+    this.subscriptions.push(
+      merge(
+        fromEvent(this.input.nativeElement, "focus"),
+        fromEvent(this.btn.nativeElement, "focus")
+      ).subscribe(this.onFocus.bind(this))
+    );
+    this.subscriptions.push(
+      merge(
+        fromEvent(this.input.nativeElement, "blur"),
+        fromEvent(this.btn.nativeElement, "blur")
+      ).subscribe(this.onBlur.bind(this))
+    );
+    this.subscriptions.push(
+      fromEvent(this.input.nativeElement, "click").subscribe(
+        this.onInputClick.bind(this)
+      )
+    );
   }
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
     this.subscriptions = [];
   }
+  //#endregion
 
-  @Input() set disabled(value: boolean) {
-    this.setDisabledState(value);
-  }
-  @Input() set isSearchable(value: boolean) {
-    if (value) {
-      this.renderer.setAttribute(this.input.nativeElement, 'readonly', '');
-    } else {
-      this.renderer.removeAttribute(this.input.nativeElement, 'readonly');
-    }
-  }
-  @Input() set showDropDown(value: boolean) {
-    this.renderer.setStyle(this.btn.nativeElement,'display',value ? '' : 'none');
-  }
-  @HostBinding('style.opacity')
+  //#region Hostbindings & HostListeners
+  @HostBinding("style.opacity")
   get opacity() {
-    return this.isDisable ? 0.25 : 1;
+    return this.disabled ? 0.25 : 1;
   }
-  // Value and getDisplayValue methods can be merged
-  get value(): string {
-    if (this.selectedValue === undefined || this.selectedValue === null) {
-      return '';
+  @HostListener("document:keyup", ["$event"])
+  keyEvent(evt: KeyboardEvent) {
+    if (evt.keyCode === 27) {
+      // Escape key
+      this.isDropListVisible = false;
     }
-    if (typeof this.selectedValue === 'object') {
-      return this.displayField ? this.selectedValue[this.displayField] : this.selectedValue.toString();
-    }
-    if (typeof this.selectedValue === 'string') {
-      return this.selectedValue;
-    }
-    return '';
-  }
-  getDisplayValueForItem(item: any): string {
-    if (this.displayField) {
-      if (item && this.displayField in item) {
-        return item[this.displayField];
-      } else {
-        return item;
+    if (this.hasFocus) {
+      switch (evt.keyCode) {
+        case 40: {
+          // Down Arrow key
+          this.moveDown();
+          break;
+        }
+        case 38: {
+          // Up Arrow Key
+          this.moveUp();
+          break;
+        }
       }
     }
-    return item ? item.toString() : '';
   }
+  @HostListener("document:click", ["$event"])
+  onDocumentClick(evt: MouseEvent) {
+    let node = evt.target["parentNode"];
+    while (node) {
+      if (node.className && node.className.indexOf("avam-dd") >= 0) {
+        return;
+      }
+      node = node["parentNode"];
+    }
+    this.hasFocus = this.isDropListVisible = false;
+  }
+  //#endregion
+
+  //#region Control's Gui Callbacks
+  get value(): string {
+    return this.getDisplayValueForItem(this.selectedValue);
+  }
+  onSelect(item: any, hide?: boolean) {
+    this.writeValue(item);
+    if (hide) {
+      this.isDropListVisible = false;
+    } else {
+      this.bringItemIntoView();
+    }
+  }
+  toggleDropDown() {
+    if (!this.isDisabled) {
+      this.isDropListVisible = !this.isDropListVisible;
+      this.adjustVisibleHeight();
+    }
+  }
+  getSelectedClass(item: any): any {
+    return {
+      selected: item === this.selectedValue
+    };
+  }
+  getDropDownDirectionClass(): any {
+    return {
+      "pos-bottom": this.dropDirection === "BOTTOM",
+      "pos-top": this.dropDirection === "TOP"
+    };
+  }
+  //#endregion
 
   //#region ControlValueAccessor Overrides
   /**
    * Allows Angular to update the model, Update the model and changes needed for the view here
-   * @param obj 
+   * @param obj
    */
   writeValue(obj: any): void {
-    this.selectedValue = obj;
-    this.onChange(this.selectedValue)
+    if (obj !== this.selectedValue) {
+      this.selectedValue = obj;
+      this.onChange(this.selectedValue);
+      this.selectionChanged.next(obj);
+    }
   }
   /**
-   * Allows Angular to register a function to call when the model changes, 
+   * Allows Angular to register a function to call when the model changes,
    * Save the function as a property to call later here.
-   * @param fn 
+   * @param fn
    */
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -118,95 +201,97 @@ export class DropDownComponent implements ControlValueAccessor {
   /**
    * Allows Angular to register a function to call when the input has been touched.
    * Save the function as a property to call later here
-   * @param fn 
+   * @param fn
    */
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
   /**
    * Allows Angular to disable the input.
-   * @param isDisabled 
+   * @param isDisabled
    */
   setDisabledState(isDisabled: boolean): void {
-    this.isDisable = isDisabled;
-    this.renderer.setProperty(this.input.nativeElement, 'disabled', isDisabled);
-    this.renderer.setProperty(this.btn.nativeElement, 'disabled', isDisabled);
+    this.renderer.setProperty(this.input.nativeElement, "disabled", isDisabled);
+    this.renderer.setProperty(this.btn.nativeElement, "disabled", isDisabled);
+    this.isDisabled = isDisabled;
   }
   //#endregion
 
-  //#region Event Handlers
-  toggleDropDown() {
-    if (!this.isDisable) {
-      this.isDropListVisible = !this.isDropListVisible;
-    }
-  }
-  onSelect(item: any) {
-    this.writeValue(item);
-    this.isDropListVisible = false;
-  }
-  @HostListener('document:keyup', ['$event'])
-  keyEvent(evt: KeyboardEvent) {
-    if (evt.keyCode === 27) { // Escape key
-      this.isDropListVisible = false;
-    }
-    console.log(evt.keyCode);
-    if (this.hasFocus) {
-      switch (evt.keyCode) {
-        case 40: { // Down Arrow key
-          this.isDropListVisible = true;
-          break;
-        };
-        case 38: { // Up Arrow Key
-
-          break;
-        };
-
+  //#region Helper Methods
+  private moveDown() {
+    if (this.listItems.length > 0) {
+      const currentIndex = this.selectedValue
+        ? this.listItems.findIndex(x => x === this.selectedValue)
+        : -1;
+      if (currentIndex < this.listItems.length - 1) {
+        const item = this.listItems[currentIndex + 1];
+        this.onSelect(item);
       }
     }
   }
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(evt: MouseEvent) {
-    let node = evt.target['parentNode'];
-    while (node) {
-      if (node.className && node.className.indexOf('avam-dd') >= 0) {
-        return;
-      }
-      node = node['parentNode'];
+  private moveUp() {
+    if (this.listItems.length > 0 && this.selectedValue) {
+      const currentIndex = this.listItems.findIndex(
+        x => x === this.selectedValue
+      );
+      const index = currentIndex > 0 ? currentIndex - 1 : 0;
+      const item = this.listItems[index];
+      this.onSelect(item);
     }
-    this.hasFocus = this.isDropListVisible = false;
   }
-  onFocus(evt: FocusEvent) {
-    console.log(evt);
-
+  private adjustVisibleHeight() {
+    if (
+      this.isDropListVisible &&
+      this.listItems.length > 0 &&
+      this.listItems.length > this.visibleItemsCount
+    ) {
+      setTimeout(() => {
+        this.ddMenu = this.elRef.nativeElement.querySelector("#ddMenu");
+        if (this.ddMenu) {
+          this.itemHeight = this.ddMenu.children[0].clientHeight;
+          this.ddContainerHeight = this.itemHeight * this.visibleItemsCount;
+          this.ddMenu.style.height = `${this.ddContainerHeight}px`;
+        }
+      }, 0);
+    }
+  }
+  private getDisplayValueForItem(item: any): string {
+    if (item === undefined || item === null) {
+      return "";
+    } else {
+      if (this.displayField) {
+        if (typeof item === "object") {
+          return item[this.displayField];
+        } else {
+          return item;
+        }
+      }
+      return item ? item.toString() : "";
+    }
+  }
+  private bringItemIntoView() {
+    if (this.ddMenu) {
+      const currentIndex = this.listItems.findIndex(
+        x => x === this.selectedValue
+      );
+      this.ddMenu.children[currentIndex].scrollIntoView();
+    }
+  }
+  private onFocus(evt: FocusEvent) {
     this.hasFocus = true;
   }
-  onBlur(evt: FocusEvent) {
-    this.ddMenu = this.elRef.nativeElement.querySelector('#ddMenu');
-    if (!this.ddMenu) {
-      this.hasFocus = this.isDropListVisible = false;
-    } else {
-      this.ddMenu.addEventListener('blur', (evt) => {
-        console.log(evt);
-      })
+  private onBlur(evt: FocusEvent) {
+    this.ddMenu = this.elRef.nativeElement.querySelector("#ddMenu");
+    if (this.ddMenu) {
+      setTimeout(() => {
+        this.hasFocus = this.isDropListVisible = false;
+      }, 500);
     }
   }
-  onInputClick() {
-    if(!this.isSearchable) {
+  private onInputClick() {
+    if (!this.isSearchable) {
       this.toggleDropDown();
     }
   }
-  getSelectedClass(item: any): any {
-    // debugger;
-    return {
-      selected: item === this.selectedValue
-    };
-  }
-  getDropDownDirectionClass(): any {
-    return {
-      'pos-bottom': this.dropDirection === 'BOTTOM',
-      'pos-top': this.dropDirection === 'TOP'
-    };
-  }
   //#endregion
-
 }
