@@ -1,11 +1,11 @@
 <div class="d-flex flex-column avam-dd">
   <div class="d-flex">
-    <input type="text" [(ngModel)]="value" #input style="width:100%">
-    <button (click)="toggleDropDown()" style="flex-shrink:0" #btn>
+    <input type="text" [(ngModel)]="value" #input style="width:100%" >
+    <button (click)="toggleDropDown(true)" style="flex-shrink:0" #btn>
       <i class="fa fa-caret-down"></i>
     </button>
   </div>
   <ul *ngIf="isDropListVisible" class="ddMenu" id="ddMenu" [ngClass]="getDropDownDirectionClass()">
-    <li *ngFor="let item of listItems;" [value]="item" (click)="onSelect(item, true)" [ngClass]="getSelectedClass(item)">{{getDisplayValueForItem(item)}}</li>
+    <li *ngFor="let item of viewList;" [value]="item" (click)="onSelect(item, true)" [ngClass]="getSelectedClass(item)">{{getDisplayValueForItem(item)}}</li>
   </ul>
 </div>

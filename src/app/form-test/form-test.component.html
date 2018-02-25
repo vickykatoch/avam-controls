@@ -32,8 +32,14 @@
   <div class="form-group row">
     <label for="dept" class="col-2 col-form-label">Dept</label>
     <div class="col-10">
-      <avam-drop-down [dropDirection]="'BOTTOM'" [isSearchable]="false" [showDropDownButton]="true" [listItems]="depts"
-        [visibleItemsCount]="4" [selectedValue]="selectedDept" formControlName="dept" [displayField]="'name'"></avam-drop-down>
+      <avam-drop-down 
+      [dropDirection]="'BOTTOM'" 
+       [showDropDownButton]="true" 
+       [listItems]="depts"
+       [isSearchable] = "true"
+        [visibleItemsCount]="4" 
+        [selectedValue]="selectedDept" formControlName="dept" 
+        [displayField]="'name'"></avam-drop-down>
     </div>
   </div>
 
