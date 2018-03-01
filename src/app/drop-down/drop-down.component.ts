@@ -74,7 +74,7 @@ export class DropDownComponent implements ControlValueAccessor {
   private ddContainerHeight = 0;
   private itemHeight = 0;
   isDropListVisible = false;
-  hasFocus = false;
+  _hasFocus = false;
   private isDisabled = false;
   private items: any[];
   viewList = this.items;
@@ -129,7 +129,7 @@ export class DropDownComponent implements ControlValueAccessor {
       // Escape key
       this.isDropListVisible = false;
     }
-    if (this.hasFocus) {
+    if (this._hasFocus) {
       switch (evt.keyCode) {
         case 40: {
           // Down Arrow key
@@ -153,26 +153,30 @@ export class DropDownComponent implements ControlValueAccessor {
       }
       node = node["parentNode"];
     }
-    this.hasFocus = this.isDropListVisible = false;
+    this._hasFocus = this.isDropListVisible = false;
   }
   //#endregion
 
   //#region Control's Gui Callbacks
-  get value(): string {
-    return this.getDisplayValueForItem(this.selectedValue);
+  get hasFocus() : boolean {
+    return this._hasFocus;
   }
   onSelect(item: any, hide?: boolean) {
-    this.writeValue(item);
-    if (hide) {
-      this.isDropListVisible = false;
-    } else {
-      this.bringItemIntoView();
+    if (item !== this.selectedValue) {
+      this.writeValue(item);
+      this.onChange(this.selectedValue);
+      if (hide) {
+        this.isDropListVisible = false;
+      } else {
+        this.bringItemIntoView();
+      }
+      this.input.nativeElement.select();
     }
   }
   toggleDropDown(forceShow?: boolean) {
     if (!this.isDisabled) {
-      if(forceShow) {
-        if(!this.isDropListVisible) {
+      if (forceShow) {
+        if (!this.isDropListVisible) {
           this.isDropListVisible = true;
           this.adjustVisibleHeight();
         }
@@ -204,7 +208,7 @@ export class DropDownComponent implements ControlValueAccessor {
   writeValue(obj: any): void {
     if (obj !== this.selectedValue) {
       this.selectedValue = obj;
-      this.onChange(this.selectedValue);
+      this.renderer.setProperty(this.input.nativeElement, 'value', this.getDisplayValueForItem(obj));
       this.selectionChanged.next(obj);
     }
   }
@@ -244,7 +248,6 @@ export class DropDownComponent implements ControlValueAccessor {
       if (currentIndex < this.viewList.length - 1) {
         const item = this.viewList[currentIndex + 1];
         this.onSelect(item);
-        this.input.nativeElement.select();
       }
     }
   }
@@ -298,14 +301,14 @@ export class DropDownComponent implements ControlValueAccessor {
   }
   private onFocus(evt: FocusEvent) {
     this.viewList = this.items;
-    this.hasFocus = true;
+    this._hasFocus = true;
   }
   private onBlur(evt: FocusEvent) {
     this.ddMenu = this.elRef.nativeElement.querySelector("#ddMenu");
     if (this.ddMenu) {
       setTimeout(() => {
-        this.hasFocus = this.isDropListVisible = false;
-      }, 500);
+        this._hasFocus = this.isDropListVisible = false;
+      }, 200);
     }
   }
   private onInputClick() {
@@ -314,26 +317,21 @@ export class DropDownComponent implements ControlValueAccessor {
     }
   }
   onSearch(evt: KeyboardEvent) {
-    console.log(evt.keyCode);
-    const shouldSearch = (evt.keyCode >= 65 && evt.keyCode <= 90) || (evt.keyCode >= 48 && evt.keyCode <= 57);
-    if (shouldSearch) {
-      const str: string = evt.target['value'].toLowerCase().trim();
-      if (str) {
-        if (this.displayField) {
-          this.viewList = this.items.filter(x => {
-            const value = x[this.displayField].toString().toLowerCase();
-            return value.startsWith(str);
-          });
-        } else {
-          this.viewList = this.items.filter(x => x.toString().toLowerCase().startsWith(str));
-        }
+    let str: string = this.input.nativeElement.value;
+    if (str && str.length > 0) {
+      str = str.toLowerCase();
+      if (this.displayField) {
+        this.viewList = this.items.filter(x => {
+          const value = x[this.displayField].toString().toLowerCase();
+          return value.startsWith(str);
+        });
       } else {
-        this.viewList = this.items;
+        this.viewList = this.items.filter(x => x.toString().toLowerCase().startsWith(str));
       }
-      if (this.viewList.length > 0) {
-        this.toggleDropDown(true);
-      }
+    } else {
+      this.viewList = this.items;
     }
+    this.viewList.length > 0 && this.toggleDropDown(true);
   }
   //#endregion
 }

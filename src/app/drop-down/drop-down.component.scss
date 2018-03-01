@@ -1,5 +1,7 @@
+
 .avam-dd {
     position: relative;
+    border: 1px solid gray; 
 }
 .pos-top {
     bottom:100%;
@@ -7,7 +9,20 @@
 .pos-bottom {
     top: 100%;
 }
+input {
+    outline: none;
+    border: none;
+    // height: 100%;
+    box-sizing: border-box;
+    &:focus {
+        border-color: #f57c82;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(243, 5, 85, 0.25);
 
+        // border: 1px solid red;
+        // transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+}
 .ddMenu {
     position: absolute;
     background: #fff;
