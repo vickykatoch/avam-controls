@@ -244,6 +244,7 @@ export class DropDownComponent implements ControlValueAccessor {
       if (currentIndex < this.viewList.length - 1) {
         const item = this.viewList[currentIndex + 1];
         this.onSelect(item);
+        this.input.nativeElement.select();
       }
     }
   }
