@@ -1,7 +1,20 @@
+:host(.input-focus) {
+    outline:none;
+    border-color: #f57c82;
+    box-shadow: 0 0 0 0.2rem rgba(243, 5, 85, 0.25);
+}
+:host {
+    width: 100%;
+    border-width:1px;
+    border-style: solid;
+    padding: 1px 0;
+    display: inline-block;
+    line-height: 1.15rem;
+}
 
 .avam-dd {
     position: relative;
-    border: 1px solid gray; 
+    // border: 1px solid gray; 
 }
 .pos-top {
     bottom:100%;
@@ -12,16 +25,8 @@
 input {
     outline: none;
     border: none;
-    // height: 100%;
+    height: 100%;
     box-sizing: border-box;
-    &:focus {
-        border-color: #f57c82;
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(243, 5, 85, 0.25);
-
-        // border: 1px solid red;
-        // transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
 }
 .ddMenu {
     position: absolute;
@@ -39,7 +44,7 @@ input {
     li {
         margin: 0;
         padding: 5px;
-        line-height: 1.3rem;
+        line-height: 1.5rem;
         cursor: pointer;
         &:hover {
             background: blue;

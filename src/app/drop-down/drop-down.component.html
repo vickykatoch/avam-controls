@@ -5,7 +5,16 @@
       <i class="fa fa-caret-down"></i>
     </button>
   </div>
+  
   <ul *ngIf="isDropListVisible" class="ddMenu" id="ddMenu" [ngClass]="getDropDownDirectionClass()">
-    <li *ngFor="let item of viewList;" [value]="item" (click)="onSelect(item, true)" [ngClass]="getSelectedClass(item)">{{getDisplayValueForItem(item)}}</li>
+    
+    <li *ngFor="let item of viewList;" [value]="item" (click)="onSelect(item, true)" >
+      <div class="d-flex">
+        <strong style="margin-right:5px;font-size:1.5rem"><i class="fa" [class.fa-angle-right]="selectedValue === item"></i></strong>
+        <span>{{getDisplayValueForItem(item)}}</span>
+      </div>
+        
+      
+    </li>
   </ul>
 </div>
