@@ -1,0 +1,19 @@
+:host {
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+
+
+
+    .header, .footer {
+        height : 30px;
+        flex-shrink: 0;
+        background: gray;
+    }
+    .body {
+        flex-grow:1;
+        overflow: auto;
+        flex-direction: column;
+    }
+
+}

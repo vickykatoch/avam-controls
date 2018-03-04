@@ -292,6 +292,7 @@ export class DropDownComponent implements ControlValueAccessor {
       }
       default:
         this.isSearching = true;
+        this.onSearch();
     }
   }
   private adjustVisibleHeight() {
@@ -349,7 +350,7 @@ export class DropDownComponent implements ControlValueAccessor {
       this.toggleDropDown();
     }
   }
-  onSearch(evt: KeyboardEvent) {
+  onSearch() {
     if (this.isSearching) {
       let str: string = this.input.nativeElement.value;
       if (str && str.length > 0) {

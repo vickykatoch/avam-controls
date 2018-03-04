@@ -1,7 +1,8 @@
 :host(.input-focus) {
     outline:none;
-    border-color: #f57c82;
-    box-shadow: 0 0 0 0.2rem rgba(243, 5, 85, 0.25);
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 :host {
     width: 100%;
@@ -9,6 +10,7 @@
     border-style: solid;
     padding: 1px 0;
     display: inline-block;
+    border-color: #ced4da;
     line-height: 1.15rem;
 }
 
@@ -27,6 +29,9 @@ input {
     border: none;
     height: 100%;
     box-sizing: border-box;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.2rem;
 }
 .ddMenu {
     position: absolute;

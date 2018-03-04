@@ -6,13 +6,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { DropDownComponent } from './drop-down/drop-down.component';
 import { FormTestComponent } from './form-test/form-test.component';
+import { DataGridComponent } from './data-grid/data-grid.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     DropDownComponent,
-    FormTestComponent
+    FormTestComponent,
+    DataGridComponent
   ],
   imports: [
     BrowserModule,
