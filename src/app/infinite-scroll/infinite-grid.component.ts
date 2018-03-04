@@ -62,7 +62,7 @@ export class CoolInfiniteGridComponent implements OnInit {
 
   @HostListener('window:scroll')
   private scrollHandler() {
-    this.onContainerScroll();
+    // this.onContainerScroll();
   }
 
   @HostListener('window:resize')
@@ -99,6 +99,7 @@ export class CoolInfiniteGridComponent implements OnInit {
 
     fromEvent(this.scrollContainer,'scroll').subscribe(evt=> {
       console.log('Scroller');
+      this.onContainerScroll();
     });
 
     this.calculateParameters();

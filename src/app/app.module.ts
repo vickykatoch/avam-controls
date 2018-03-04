@@ -10,6 +10,7 @@ import { DataGridComponent } from './data-grid/data-grid.component';
 import { GridSampleComponent } from './grid-sample/grid-sample.component';
 import { CoolInfiniteGridComponent } from './infinite-scroll/infinite-grid.component';
 import { InfiniteGridSampleComponent } from './infinite-grid-sample/infinite-grid-sample.component';
+import { ScollContainerComponent } from './scoll-container/scoll-container.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { InfiniteGridSampleComponent } from './infinite-grid-sample/infinite-gri
     DataGridComponent,
     GridSampleComponent,
     CoolInfiniteGridComponent,
-    InfiniteGridSampleComponent
+    InfiniteGridSampleComponent,
+    ScollContainerComponent
   ],
   imports: [
     BrowserModule,
