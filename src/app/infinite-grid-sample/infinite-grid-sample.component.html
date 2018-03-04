@@ -1,0 +1,10 @@
+<div  class="g-container">
+    <cool-infinite-grid [itemIterator]="myItemIterator" [itemHeight]="100" [itemWidth]="100" [itemSpace]="10">
+      <ng-template let-item>
+        <div style="text-align: center; height: 100%" [style.backgroundColor]="item.color">
+          {{ item.name }}
+          <button (click)="changeColor(item)">Change Color</button>
+        </div>
+      </ng-template>
+    </cool-infinite-grid>
+</div>

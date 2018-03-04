@@ -10,13 +10,21 @@
         height : 30px;
         flex-shrink: 0;
         background: gray;
+        padding: 0;
     }
     .body {
         overflow: auto;
     }
 
-    .column {
+    .g-column {
       display: inline-block;
       border-right:1px solid;
+      height: inherit;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .g-row {
+        border-bottom:1px solid;
     }
 }

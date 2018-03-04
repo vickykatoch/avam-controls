@@ -15,7 +15,7 @@ export class GridSampleComponent implements OnInit {
 
   ngOnInit() {
     this.buildColumns();
-    this.employees = EmployeeBuilder.buildEmpData(10);
+    this.employees = EmployeeBuilder.buildEmpData(1000);
   }
 
 

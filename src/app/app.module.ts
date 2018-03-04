@@ -8,6 +8,8 @@ import { DropDownComponent } from './drop-down/drop-down.component';
 import { FormTestComponent } from './form-test/form-test.component';
 import { DataGridComponent } from './data-grid/data-grid.component';
 import { GridSampleComponent } from './grid-sample/grid-sample.component';
+import { CoolInfiniteGridComponent } from './infinite-scroll/infinite-grid.component';
+import { InfiniteGridSampleComponent } from './infinite-grid-sample/infinite-grid-sample.component';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import { GridSampleComponent } from './grid-sample/grid-sample.component';
     DropDownComponent,
     FormTestComponent,
     DataGridComponent,
-    GridSampleComponent
+    GridSampleComponent,
+    CoolInfiniteGridComponent,
+    InfiniteGridSampleComponent
   ],
   imports: [
     BrowserModule,

@@ -1,11 +1,22 @@
 <div class="d-flex flex-column flex-fill">
   <div class="header">
-    <div *ngFor="let col of columns" class="column" [ngStyle]="{'width' : colWidth}">
+    <div *ngFor="let col of columns" class="g-column" [style.width.px]="col.width">
       {{col.caption}}
     </div>
   </div>
   <div class="body flex-fill">
-    body
+    <!-- <cool-infinite-grid [itemIterator]="myItemIterator" [itemHeight]="100" [itemWidth]="100" [itemSpace]="10">
+        <ng-template let-item>
+            <div *ngFor="let col of item.columns" class="g-column" [style.width.px]="col.width">
+                {{row[col.name]}}
+              </div>
+        </ng-template> -->
+      <div *ngFor="let row of data" class="g-row">
+        <div *ngFor="let col of columns" class="g-column" [style.width.px]="col.width">
+          {{row[col.name]}}
+        </div>
+      </div>
+    <!-- </cool-infinite-grid> -->
   </div>
   <div class="footer">
     1
