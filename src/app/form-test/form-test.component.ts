@@ -23,9 +23,10 @@ export class FormTestComponent implements OnInit {
       lastName : ['',[Validators.required]],
       gender : ['', Validators.required],
       age : ['', Validators.required],
-      dept : ['', { disabled : true}]
+      dept : ['']
     });
     this.employeeGroup.patchValue(this.emp);
+    // this.employeeGroup.controls['dept'].disable();
     // this.employeeGroup.controls['dept'].setValue(this.emp.dept);
 
   }

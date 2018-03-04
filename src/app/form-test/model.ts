@@ -5,7 +5,7 @@ export interface Emp {
     gender: string;
     hobbies: Hobby[];
     age: number;
-    dept: Dept;
+    dept?: Dept;
 }
 
 export interface Dept {
@@ -73,7 +73,7 @@ export class EmployeeBuilder {
             gender: 'M',
             age: 35,
             hobbies: HobbyBuilder.getThree(),
-            dept: DeptBuilder.getDept(2)
+            // dept: DeptBuilder.getDept(2)
         };
     }
     static save(emp: Emp) {

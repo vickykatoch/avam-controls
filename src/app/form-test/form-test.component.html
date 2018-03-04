@@ -30,15 +30,15 @@
     </div>
   </div>
   <div class="form-group row">
+     <!-- [disabled] = "true" -->
     <label for="dept" class="col-2 col-form-label">Dept</label>
     <div class="col-10">
-      <avam-drop-down 
-      [dropDirection]="'BOTTOM'" 
-       [showDropDownButton]="true" 
+      <avam-drop-down
+      [dropDirection]="'BOTTOM'"
+      [attr.disabled]="true"
        [listItems]="depts"
-       [isSearchable] = "false"
-        [visibleItemsCount]="4" 
-        [selectedValue]="selectedDept" formControlName="dept" 
+        [visibleItemsCount]="4"
+        [selectedValue]="selectedDept" formControlName="dept"
         [displayField]="'name'"></avam-drop-down>
     </div>
   </div>

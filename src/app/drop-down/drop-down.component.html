@@ -1,14 +1,14 @@
 <div class="d-flex flex-column avam-dropdown">
   <div class="d-flex">
-    <input type="text"  #input style="width:100%" >
-    <button (click)="toggleDropDown(true)" style="flex-shrink:0" #btn tabindex="-1">
+    <input type="text"  #input style="width:100%" readonly>
+    <button (click)="toggleDropDownVisibility(true);_hasFocus=true" style="flex-shrink:0" #btn tabindex="-1">
       <i class="fa fa-caret-down"></i>
     </button>
   </div>
 
   <ul *ngIf="isDropListVisible" class="drop-layer" id="drop-layer" [ngClass]="getDropDownDirectionClass()">
 
-    <li *ngFor="let item of viewList;" [value]="item" (click)="onSelect(item, true)" >
+    <li *ngFor="let item of listItems;" [value]="item" (click)="onSelect(item, true)" >
       <div class="d-flex">
         <strong style="margin-right:5px;font-size:1.5rem"><i class="fa" [class.fa-angle-right]="selectedValue === item"></i></strong>
         <span>{{getDisplayValueForItem(item)}}</span>
