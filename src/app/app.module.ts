@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { DropDownComponent } from './drop-down/drop-down.component';
 import { FormTestComponent } from './form-test/form-test.component';
 import { DataGridComponent } from './data-grid/data-grid.component';
+import { GridSampleComponent } from './grid-sample/grid-sample.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { DataGridComponent } from './data-grid/data-grid.component';
     AppComponent,
     DropDownComponent,
     FormTestComponent,
-    DataGridComponent
+    DataGridComponent,
+    GridSampleComponent
   ],
   imports: [
     BrowserModule,

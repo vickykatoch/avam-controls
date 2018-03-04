@@ -13,6 +13,8 @@ export class FormTestComponent implements OnInit {
   emp : Emp = EmployeeBuilder.build();
   isDisabled = true;
   selectedDept : Dept = this.depts[0];
+  employees : Emp[];
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
