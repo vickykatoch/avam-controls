@@ -41,7 +41,7 @@ export class DropDownComponent implements ControlValueAccessor {
   }
   @ViewChild("input") input: ElementRef;
   @ViewChild("btn") btn: ElementRef;
-  @ViewChild("dummyNode") dummyNode: ElementRef;
+  // @ViewChild("dummyNode") dummyNode: ElementRef;
   @Input() visibleItemsCount = 8;
   @Input() dropDirection: string = DROPDOWN_DIRECTION_BOTTOM;
   @Output() selectionChanged = new EventEmitter<any>();
@@ -69,7 +69,7 @@ export class DropDownComponent implements ControlValueAccessor {
   //#endregion
 
   //#region Internal State
-  private ddMenu: HTMLUListElement;
+  private dropLayer: HTMLUListElement;
   private _isSearchable = false;
   private ddContainerHeight = 0;
   private itemHeight = 0;
@@ -157,7 +157,7 @@ export class DropDownComponent implements ControlValueAccessor {
   onDocumentClick(evt: MouseEvent) {
     let node = evt.target["parentNode"];
     while (node) {
-      if (node.className && node.className.indexOf("avam-dd") >= 0) {
+      if (node.className && node.className.indexOf("avam-dropdown") >= 0) {
         return;
       }
       node = node["parentNode"];
@@ -302,11 +302,11 @@ export class DropDownComponent implements ControlValueAccessor {
       this.viewList.length > this.visibleItemsCount
     ) {
       setTimeout(() => {
-        this.ddMenu = this.elRef.nativeElement.querySelector("#ddMenu");
-        if (this.ddMenu) {
-          this.itemHeight = this.ddMenu.children[0].clientHeight;
+        this.dropLayer = this.elRef.nativeElement.querySelector("#drop-layer");
+        if (this.dropLayer) {
+          this.itemHeight = this.dropLayer.children[0].clientHeight;
           this.ddContainerHeight = this.itemHeight * this.visibleItemsCount;
-          this.ddMenu.style.height = `${this.ddContainerHeight}px`;
+          this.dropLayer.style.height = `${this.ddContainerHeight}px`;
         }
       }, 0);
     }
@@ -326,11 +326,11 @@ export class DropDownComponent implements ControlValueAccessor {
     }
   }
   private bringItemIntoView() {
-    if (this.ddMenu) {
+    if (this.dropLayer) {
       const currentIndex = this.viewList.findIndex(
         x => x === this.selectedValue
       );
-      this.ddMenu.children[currentIndex].scrollIntoView();
+      this.dropLayer.children[currentIndex].scrollIntoView();
     }
   }
   private onFocus(evt: FocusEvent) {
@@ -338,8 +338,8 @@ export class DropDownComponent implements ControlValueAccessor {
     this._hasFocus = true;
   }
   private onBlur(evt: FocusEvent) {
-    this.ddMenu = this.elRef.nativeElement.querySelector("#ddMenu");
-    if (this.ddMenu) {
+    this.dropLayer = this.elRef.nativeElement.querySelector("#ddMenu");
+    if (this.dropLayer) {
       setTimeout(() => {
         this._hasFocus = this.isDropListVisible = false;
       }, 200);

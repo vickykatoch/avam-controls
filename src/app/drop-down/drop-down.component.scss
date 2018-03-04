@@ -1,63 +1,71 @@
 :host(.input-focus) {
-    outline:none;
+    outline: none;
     border-color: #80bdff;
     outline: 0;
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
+
 :host {
     width: 100%;
-    border-width:1px;
+    border-width: 1px;
     border-style: solid;
-    padding: 1px 0;
+    padding: 0;
     display: inline-block;
     border-color: #ced4da;
     line-height: 1.15rem;
 }
 
-.avam-dd {
+:host .avam-dropdown {
     position: relative;
-    // border: 1px solid gray; 
-}
-.pos-top {
-    bottom:100%;
-}
-.pos-bottom {
-    top: 100%;
-}
-input {
-    outline: none;
-    border: none;
-    height: inherit;
-    box-sizing: border-box;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    border-radius: 0.2rem;
-}
-.ddMenu {
-    position: absolute;
-    background: #fff;
-    left: 0;
-    right:0;
-    border: 1px solid gray;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    z-index: 10;
-    overflow-x: hidden;
-    overflow-y: auto;
-    user-select: none;
-    li {
+
+
+    .pos-top {
+        bottom: 100%;
+    }
+    .pos-bottom {
+        top: 100%;
+    }
+
+    input {
+        outline: none;
+        border: none;
+        height: inherit;
+        box-sizing: border-box;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        border-radius: 0.2rem;
+    }
+
+    .drop-layer {
+        position: absolute;
+        background: #fff;
+        left: 0;
+        right: 0;
+        border: 1px solid gray;
+        list-style-type: none;
         margin: 0;
-        padding: 5px;
-        line-height: 1.5rem;
-        cursor: pointer;
-        &:hover {
+        padding: 0;
+        z-index: 10;
+        overflow-x: hidden;
+        overflow-y: auto;
+        user-select: none;
+        li {
+            margin: 0;
+            padding: 5px;
+            line-height: 1.5rem;
+            cursor: pointer;
+            &:hover {
+                background: blue;
+                color: #fff;
+            }
+        }
+        .selected {
             background: blue;
-            color : #fff;
+            color: #fff;
         }
     }
-    .selected {
-        background: blue;
-        color : #fff;
-    }
+
 }
+
+
+

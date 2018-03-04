@@ -1,4 +1,4 @@
-<div class="d-flex flex-column avam-dd">
+<div class="d-flex flex-column avam-dropdown">
   <div class="d-flex">
     <input type="text"  #input style="width:100%" >
     <button (click)="toggleDropDown(true)" style="flex-shrink:0" #btn tabindex="-1">
@@ -6,7 +6,7 @@
     </button>
   </div>
   
-  <ul *ngIf="isDropListVisible" class="ddMenu" id="ddMenu" [ngClass]="getDropDownDirectionClass()">
+  <ul *ngIf="isDropListVisible" class="drop-layer" id="drop-layer" [ngClass]="getDropDownDirectionClass()">
     
     <li *ngFor="let item of viewList;" [value]="item" (click)="onSelect(item, true)" >
       <div class="d-flex">
