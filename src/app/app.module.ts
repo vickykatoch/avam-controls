@@ -11,6 +11,7 @@ import { GridSampleComponent } from './grid-sample/grid-sample.component';
 import { CoolInfiniteGridComponent } from './infinite-scroll/infinite-grid.component';
 import { InfiniteGridSampleComponent } from './infinite-grid-sample/infinite-grid-sample.component';
 import { ScollContainerComponent } from './scoll-container/scoll-container.component';
+// import { DropdownModule } from 'ngx-dropdown'
 
 
 @NgModule({

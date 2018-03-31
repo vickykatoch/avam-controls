@@ -1,0 +1,21 @@
+.tluscent {
+    line-height: 30px;
+    height: 30px;
+    width: 100%;
+    
+
+    background-image:
+        linear-gradient(to right, #FFB5AD , #ffb5ad), 
+        linear-gradient(to right, #E1F9DB, #E1F9DB), 
+        linear-gradient(to right, #f2f9fe , #f2f9fe );
+    background-repeat: no-repeat; 
+    background-position:
+        0 0, /* gradient 1 */
+        50% 0, /* gradient 2 */
+        80% 0; /* gradient 3 */
+    background-size:
+        50% 100%,
+        70% 100%,
+        100% 100%;
+    text-align: center;
+}
